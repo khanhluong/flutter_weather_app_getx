@@ -10,15 +10,14 @@ class WeatherController extends GetxController {
 
   @override
   void onInit() {
+    //TODO remove hardcode, using use input or GPS
     fetchDataFromWeatherApi("Auckland");
     super.onInit();
   }
 
   @override
   void onReady() {
-    ever(weatherResponse, (_) async {
-      print("onready called , ${weatherResponse.value.main.temp}");
-    });
+    ever(weatherResponse, (_) async {});
     super.onReady();
   }
 
@@ -28,7 +27,6 @@ class WeatherController extends GetxController {
 
   Future<WeatherModel> getWeather(String cityName) async {
     try {
-      // var cityName = await getUserCityName();
       var data = await WeatherRepository.instance.loadGlobalData(cityName);
       var res = WeatherModel.fromJson(data);
       print(res.timezone);
@@ -42,10 +40,8 @@ class WeatherController extends GetxController {
   Future<void> fetchDataFromWeatherApi(String cityName) async {
     return getWeather(cityName).then(
       (data) {
-        // put the return reactive data into the rxModel <weather>
         weatherResponse(data);
         status(Status.success);
-        print("The data print out and status is success");
       },
       onError: (err) {
         print("$err");
